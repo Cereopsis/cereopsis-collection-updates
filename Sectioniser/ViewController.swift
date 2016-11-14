@@ -34,52 +34,52 @@ class ViewController: UICollectionViewController {
         super.viewDidLoad()
     }
 
-    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return datasource.count / itemsPerSection + 1
     }
     
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if (section + 1) * itemsPerSection > datasource.count {
             return datasource.count % itemsPerSection
         }
         return itemsPerSection
     }
     
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! Cell
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! Cell
         cell.label.text = "\(indexPath.section), \(indexPath.item)"
         return cell
     }
     
-    @IBAction func goSmall(sender: AnyObject) {
+    @IBAction func goSmall(_ sender: AnyObject) {
         let collection = collectionView!
         collection.performBatchUpdates({
-            collection.deleteSections(NSIndexSet(index: 2))
-            collection.deleteItemsAtIndexPaths(NSIndexPath.indexPaths(inSection: 1, range: 1..<4))
+            collection.deleteSections(IndexSet(integer: 2))
+            collection.deleteItems(at: IndexPath.indexPaths(inSection: 1, range: 1..<4))
             self.datasource = [1,2,3,4,5]
             }, completion: nil)
     }
  
-    @IBAction func goLarge(sender: AnyObject) {
+    @IBAction func goLarge(_ sender: AnyObject) {
         let collection = collectionView!
         collection.performBatchUpdates({
-            collection.insertSections(NSIndexSet(index: 3))
-            collection.insertItemsAtIndexPaths(NSIndexPath.indexPaths(inSection: 2, range: 1..<4))
+            collection.insertSections(IndexSet(integer: 3))
+            collection.insertItems(at: IndexPath.indexPaths(inSection: 2, range: 1..<4))
             self.datasource = [1,2,3,4,5,6,7,8,9,10,11,12,13,14]
             }, completion: nil)
     }
     
-    @IBAction func reload(sender: AnyObject) {
+    @IBAction func reload(_ sender: AnyObject) {
         datasource = [1,2,3,4,5,6,7,8,9]
         collectionView!.reloadData()
     }
 }
 
-extension NSIndexPath {
+extension IndexPath {
     
     /// Returns an array of index paths where `item` is contained in `range` and section == `section`
-    static func indexPaths(inSection section: Int, range: Range<Int>) -> [NSIndexPath] {
-        return range.map { i in NSIndexPath(forItem: i, inSection: section) }
+    static func indexPaths(inSection section: Int, range: CountableRange<Int>) -> [IndexPath] {
+        return range.map { i in IndexPath(item: i, section: section) }
     }
     
 }
